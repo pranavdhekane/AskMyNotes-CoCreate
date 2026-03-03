@@ -1,0 +1,44 @@
+<%- include('partials/header', { title: "404 • AskMyNotes" }) %>
+
+<body class="bg-dorado-950 text-dorado-200 min-h-screen flex flex-col">
+
+    <!-- Main Content -->
+    <main class="flex-grow flex items-center justify-center px-6">
+
+        <div class="max-w-2xl text-center">
+
+            <!-- 404 Number -->
+            <div class="relative inline-block mb-6">
+                <h1 class="text-8xl md:text-9xl font-extrabold text-dorado-800 opacity-20">
+                    404
+                </h1>
+                <h2 class="absolute inset-0 flex items-center justify-center text-3xl md:text-4xl font-bold text-white">
+                    Page Not Found
+                </h2>
+            </div>
+
+            <!-- Description -->
+            <p class="text-dorado-400 text-base md:text-lg leading-relaxed mb-10">
+                Looks like this page wandered off.  
+                The link may be broken or the page might have been removed.
+            </p>
+
+            <!-- Buttons -->
+            <div class="flex flex-col sm:flex-row gap-4 justify-center">
+
+                <!-- Home Button -->
+                <a href="/"
+                   class="px-8 py-3 rounded-lg bg-dorado-700 text-white font-medium hover:bg-dorado-800 transition shadow-md">
+                    Go to Home
+                </a>
+
+            </div>
+
+        </div>
+
+    </main>
+
+    <%- include('partials/footer') %>
+
+</body>
+</html>

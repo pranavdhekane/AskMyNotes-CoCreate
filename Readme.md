@@ -146,13 +146,14 @@ AskMyNotes enforces:
 
 ```bash
 # Clone the repository
-git clone https://github.com/pranavdhekane/AskMyNotes.git
+git clone https://github.com/pranavdhekane/AskMyNotes-CoCreate.git
 
 # Navigate into the project
-cd AskMyNotes
+cd AskMyNotes-CoCreate
 
 # Install dependencies
 npm install
 
 # Start the server
 npm start
+```
