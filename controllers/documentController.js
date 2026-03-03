@@ -26,9 +26,8 @@ exports.uploadDocuments = async (req, res) => {
     }
 
     const newFiles = files.map(file => ({
-      filename: file.filename,
-      originalName: file.originalname,
-      path: file.path
+      filename: Date.now() + '-' + file.originalname,
+      originalName: file.originalname
     }));
 
     subject.notes.push(...newFiles);
@@ -37,8 +36,7 @@ exports.uploadDocuments = async (req, res) => {
     for (const file of files) {
       try {
         await processDocument(
-          file.path,
-          file.filename,
+          file.buffer,
           file.originalname,
           subjectId,
           req.session.userId
@@ -59,14 +57,15 @@ exports.uploadDocuments = async (req, res) => {
   }
 };
 
-async function processDocument(filePath, filename, originalName, subjectId, userId) {
+async function processDocument(buffer, originalName, subjectId, userId) {
   const ext = path.extname(originalName).toLowerCase();
   
   let text;
+
   if (ext === '.pdf') {
-    text = await extractTextFromPDF(filePath);
+    text = await extractTextFromPDF(buffer);
   } else if (ext === '.txt') {
-    text = extractTextFromTXT(filePath);
+    text = extractTextFromTXT(buffer);
   } else {
     throw new Error('Unsupported file type');
   }
@@ -76,15 +75,13 @@ async function processDocument(filePath, filename, originalName, subjectId, user
   }
 
   const chunks = chunkText(text);
-  
-  console.log(`Creating ${chunks.length} chunks for ${originalName}`);
 
   for (const chunk of chunks) {
-    if (chunk.content && chunk.content.trim().length > 0) {
+    if (chunk.content?.trim()) {
       await DocumentChunk.create({
         subjectId,
         userId,
-        filename,
+        filename: originalName,
         originalName,
         chunkIndex: chunk.chunkIndex,
         content: chunk.content
@@ -140,12 +137,6 @@ exports.deleteDocument = async (req, res) => {
     }
 
     const doc = subject.notes[docIndex];
-
-    const fs = require('fs');
-    const filePath = require('path').join(__dirname, '..', doc.path);
-    if (fs.existsSync(filePath)) {
-      fs.unlinkSync(filePath);
-    }
 
     await DocumentChunk.deleteMany({
       subjectId,
