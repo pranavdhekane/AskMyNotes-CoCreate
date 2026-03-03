@@ -241,6 +241,13 @@ chatInput.addEventListener("input", () => {
     chatInput.style.height = Math.min(chatInput.scrollHeight, 128) + "px";
 });
 
+chatInput.addEventListener("keydown", (e) => {
+    if (e.key === "Enter" && !e.shiftKey) {
+        e.preventDefault(); // stop new line
+        chatForm.dispatchEvent(new Event("submit"));
+    }
+});
+
 chatForm.addEventListener("submit", async (e) => {
     e.preventDefault();
     if (isProcessing) return;
