@@ -1,16 +1,23 @@
-const fs = require('fs');
 const pdfParse = require('pdf-parse');
 
-async function extractTextFromPDF(filePath) {
-  const dataBuffer = fs.readFileSync(filePath);
-  const data = await pdfParse(dataBuffer);
+/**
+ * Extract text from PDF buffer
+ */
+async function extractTextFromPDF(buffer) {
+  const data = await pdfParse(buffer);
   return data.text;
 }
 
-function extractTextFromTXT(filePath) {
-  return fs.readFileSync(filePath, 'utf-8');
+/**
+ * Extract text from TXT buffer
+ */
+function extractTextFromTXT(buffer) {
+  return buffer.toString('utf-8');
 }
 
+/**
+ * Chunk text into smaller pieces
+ */
 function chunkText(text) {
   const chunkSize = 1000;
   const chunks = [];
@@ -20,10 +27,12 @@ function chunkText(text) {
   while (start < text.length) {
     const end = start + chunkSize;
     const chunk = text.slice(start, end);
+
     chunks.push({
       content: chunk.trim(),
       chunkIndex: index
     });
+
     start = end;
     index++;
   }
